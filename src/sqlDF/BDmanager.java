@@ -1,12 +1,16 @@
 package sqlDF;
 
+import java.util.ArrayList;
+
 public class BDmanager {// gerer les tables de base de donnée
-	private BdRelation[] relation;
+	Connect conn;
+	ArrayList<BdRelation> relations;
 	public BDmanager(Connect conn) {
-		
+		relations = new ArrayList<BdRelation>();
+		this.conn = conn;
+		for(int i = 0;i < conn.getnames().size();i++) {
+			relations.add(conn.createtable(i));
+		}
 	}
-	/**
-	 * c'est ici que on va generer les bd relation qui represente les tables dans une base de données
-	 * donc on a besoin des tables 
-	 */
+	// on va
 }

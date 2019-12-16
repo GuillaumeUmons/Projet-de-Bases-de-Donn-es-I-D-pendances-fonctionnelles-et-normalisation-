@@ -1,5 +1,7 @@
 package df;
 
+import java.util.ArrayList;
+
 public class Df {
 	private String[] X;
 	private String[] Y;
@@ -52,4 +54,26 @@ public class Df {
 		}
 		return (x +" -> "+ y);
 	}
+	
+	public boolean equals(Df df) {
+		return (X.equals(df.getX()) && Y.equals(df.getY()));// si ils ont le même ensemble d'attribut pour les deux parties
+	}
+	public ArrayList<String[]> decompoY(){// on va decomposer Y en differente partition ca va servir pour les consequenses logiques
+		ArrayList<String[]> decomp = new ArrayList<>();
+		for(int i = 0;i < Y.length;i++) {
+			String[] st = new String[i+1];
+			for(int a = 0;a<st.length - 1;a++) {
+				st[a] = Y[a];
+			}
+			for(int j = i+1;j <Y.length;j++ ) {
+				st[st.length-1] = Y[j];
+				decomp.add(st);
+			}
+		}
+		return decomp;// c'est un truc comme ca que il faut experimenter
+	}
+	public boolean xequal(String[] x) {
+		return (Boolean)
+	}
+	
 }
