@@ -13,6 +13,9 @@ public class Relation { // relation pour les données qui ne viennent pas de la b
 	public ArrayList<String> getnames() {
 		return names;
 	}
+	public String getname() {
+		return name;
+	}
 	public String get(int i) {
 		String res = null;
 		try {

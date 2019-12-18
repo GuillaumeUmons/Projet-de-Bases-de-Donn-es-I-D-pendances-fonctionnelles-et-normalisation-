@@ -8,6 +8,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
+import df.Df;
+
 public class Connect {
 	private Connection conn;
 	private DatabaseMetaData dmd;
@@ -70,9 +72,8 @@ public class Connect {
 		}
 		return name;
 	}// voila c'est la liste des nom des tables
-	
-	
-	public ArrayList<String> getattribute(int i) {
+
+	public ArrayList<String> getattribute(int i) {// pour avoir les attribut d'une table se trouvant à la position i de l'arraylist tablenames
 		ArrayList<String> colname = new ArrayList<String>();
 		try {
 			Statement stmt = conn.createStatement();
@@ -101,21 +102,22 @@ public class Connect {
 			stmnt = conn.createStatement();
 			ArrayList<String> attribute = getattribute(i); // normalement c'est la methode pour recevoir les attributs en java
 			table = new BdRelation(attribute,tablenames.get(i));
-			String[] col;// dans BdRelation on a une arraylist qui contiendra des tableau de string et ces strings la ce seront
 			for(int o = 0;o <attribute.size();o++) {
+				ArrayList<String> col = new ArrayList<String>();// dans BdRelation on a une arraylist qui contiendra des tableau de string et ces strings la ce seront
 				ResultSet result = stmnt.executeQuery("SELECT "+attribute.get(o)+" FROM "+tablenames.get(i));
+				System.out.println("SELECT "+attribute.get(o)+" FROM "+tablenames.get(i));
 				ResultSetMetaData rsmd = result.getMetaData();
 				int nbcol =rsmd.getColumnCount();
-				col = new String[nbcol];
 				System.out.println("la taille des tableau est "+nbcol);
 				System.out.println("moment "+o);
-				while(result.next()){
-					for(int b = 0;b < nbcol;b++) {
+					for(int b = 0;b < nbcol;b++) {// le problème est là
+						while(result.next()) {
 						System.out.println("l'element ajouté pour "+attribute.get(o)+" est "+b+" c'est a dire"+ result.getString(b+1));
-						col[b] = result.getString(b+1);
-					}
+						col.add(result.getObject(b+1).toString());
+						}
+					table.add(o, col);
 				}
-				table.add(o, col);
+
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -138,4 +140,44 @@ public class Connect {
 			e.printStackTrace();
 		}
 	}
+	public void addfuncdep(Df df,String Relation) {// ajouter les def
+	}
+	
+	public void createfuncdep() {
+		try {
+			Statement stmt = conn.createStatement();
+			String sql = "CREATE TABLE IF NOT EXISTS FuncDep(\n"
+	                + "    table_name TEXT NOT NULL,\n"
+	                + "    lhs TEXT NOT NULL,\n"
+	                + "    rhs TEXT NOT NULL,\n"
+	                + ");";
+			stmt.executeUpdate(sql);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}		
+	}
+	
+	
+	public void addDF(Df df,String rel) {
+		if(df.getY().length == 1) {
+			try {
+				String X = "";
+				for(int i = 0;i < df.getX().length;i++) {
+					if(i < df.getX().length-1) {
+						X = X+df.getX()[i]+",";
+					}
+				}	
+				Statement stmt = conn.createStatement();
+				String sql = "INSERT INTO FuncDep VALUES('"+rel+"','"+X+"','"+df.getY()[0]+"')";
+				stmt.execute(sql);
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		else {
+			System.out.println("Ce n'est pas une bonne dependance fonctionnel");
+		}
+	}	
 }
