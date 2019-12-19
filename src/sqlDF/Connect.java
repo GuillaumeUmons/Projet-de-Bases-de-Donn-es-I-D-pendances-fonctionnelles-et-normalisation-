@@ -28,8 +28,6 @@ public class Connect {
 			this.path = path;
 			dmd = conn.getMetaData();// le truc qui va nous permettre de toucher au tables sql
 			tablenames = gettablesname();
-			if(conn != null)
-				System.out.println("c'est bon");
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -102,22 +100,15 @@ public class Connect {
 			stmnt = conn.createStatement();
 			ArrayList<String> attribute = getattribute(i); // normalement c'est la methode pour recevoir les attributs en java
 			table = new BdRelation(attribute,tablenames.get(i));
-			for(int o = 0;o <attribute.size();o++) {
+			ResultSet result = stmnt.executeQuery("SELECT *"+" FROM "+tablenames.get(i));
+			ResultSetMetaData rsmd = result.getMetaData();
+			int nbcol =rsmd.getColumnCount();
+			while(result.next()) {
 				ArrayList<String> col = new ArrayList<String>();// dans BdRelation on a une arraylist qui contiendra des tableau de string et ces strings la ce seront
-				ResultSet result = stmnt.executeQuery("SELECT "+attribute.get(o)+" FROM "+tablenames.get(i));
-				System.out.println("SELECT "+attribute.get(o)+" FROM "+tablenames.get(i));
-				ResultSetMetaData rsmd = result.getMetaData();
-				int nbcol =rsmd.getColumnCount();
-				System.out.println("la taille des tableau est "+nbcol);
-				System.out.println("moment "+o);
-					for(int b = 0;b < nbcol;b++) {// le problème est là
-						while(result.next()) {
-						System.out.println("l'element ajouté pour "+attribute.get(o)+" est "+b+" c'est a dire"+ result.getString(b+1));
-						col.add(result.getObject(b+1).toString());
-						}
-					table.add(o, col);
+				for(int b = 0;b < nbcol;b++) {// le problème est là	
+					col.add(result.getObject(b+1).toString());
 				}
-
+				table.add(col);
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -144,14 +135,15 @@ public class Connect {
 	}
 	
 	public void createfuncdep() {
+		String sql = "CREATE TABLE IF NOT EXISTS FuncDep(\n"
+                + "    table_name TEXT NOT NULL,\n"
+                + "    lhs TEXT NOT NULL,\n"
+                + "    rhs TEXT NOT NULL\n"
+                + ");";
 		try {
 			Statement stmt = conn.createStatement();
-			String sql = "CREATE TABLE IF NOT EXISTS FuncDep(\n"
-	                + "    table_name TEXT NOT NULL,\n"
-	                + "    lhs TEXT NOT NULL,\n"
-	                + "    rhs TEXT NOT NULL,\n"
-	                + ");";
-			stmt.executeUpdate(sql);
+
+			stmt.execute(sql);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -160,6 +152,7 @@ public class Connect {
 	
 	
 	public void addDF(Df df,String rel) {
+		ArrayList<ArrayList> j = new ArrayList();
 		if(df.getY().length == 1) {
 			try {
 				String X = "";
