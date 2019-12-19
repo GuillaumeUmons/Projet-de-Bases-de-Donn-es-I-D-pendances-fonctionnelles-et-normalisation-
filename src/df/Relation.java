@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class Relation { // relation pour les données qui ne viennent pas de la base de donnée
 	protected String name;
 	protected ArrayList<String> names;
-	private ArrayList<Df> df;
+	private ArrayList<Df> df = new ArrayList<Df>();
 	public Relation(ArrayList<String> names,String name) {
 		this.names = names;
 		this.name = name;
@@ -15,6 +15,9 @@ public class Relation { // relation pour les données qui ne viennent pas de la b
 	}
 	public String getname() {
 		return name;
+	}
+	public void adddf(Df d) {
+		df.add(d);
 	}
 	public String get(int i) {
 		String res = null;
@@ -32,9 +35,6 @@ public class Relation { // relation pour les données qui ne viennent pas de la b
 			a = a+i+"|";
 		}
 		return a;
-	}
-	public void setdf() {
-		
 	}
 	public boolean BCNF() {
 		boolean bool = true;
@@ -112,5 +112,8 @@ public class Relation { // relation pour les données qui ne viennent pas de la b
 		}
 		return res;
 	}
-
+	public ArrayList<Df> getDf(){
+		return df;
+	}
+	
 }

@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import df.Df;
 
 public class FuncDepManager {// gerer les tables de base de donnée
-	Connect conn;
-	ArrayList<BdRelation> relations;
+	private Connect conn;
+	private ArrayList<BdRelation> relations;
 	private int ArrayList;
 	public FuncDepManager(Connect conn) {
 		relations = new ArrayList<BdRelation>();
@@ -43,7 +43,7 @@ public class FuncDepManager {// gerer les tables de base de donnée
 		System.out.println(arr);
 		System.out.println(aa);
 		// regarder le nombre d'occurence
-		for(ArrayList a:arr) {
+		for(ArrayList<String> a:arr) {
 			int ii = arr.indexOf(a);
 			ArrayList<String> lien = aa.get(ii);
 			boolean occur = true;
@@ -87,7 +87,7 @@ public class FuncDepManager {// gerer les tables de base de donnée
 		funcdep.affiche();	
 	}
 	
-	private Df df(int i) {// la df à la ligne i dans funcdep on compte sur le fait que funcdep marche bien
+	public Df df(int i) {// la df à la ligne i dans funcdep on compte sur le fait que funcdep marche bien
 		Df df;
 		BdRelation funcdep = get("FuncDep");
 		ArrayList<String> arr = funcdep.gettuple(i);// il est censé y avoir que 3 valeur dans ca et on ne peut rien modifier dans ces arrayList normalement donc on peut facilement y toucher
@@ -118,6 +118,18 @@ public class FuncDepManager {// gerer les tables de base de donnée
 		}
 		df = new Df(x,new String[]{b});
 		return df;
+	}
+	
+	public void attribuatedf() {// attribuer les df au relations
+		BdRelation funcdep = get("FuncDep");
+		for(int i = 0;i < funcdep.getvalue().size();i++) {
+			BdRelation bd = get((String) funcdep.gettuple(i).get(0));
+			Df d = df(i);
+			bd.adddf(d);
+		}
+	}
+	public ArrayList<BdRelation> getrels(){
+		return relations;
 	}
 	
 }
