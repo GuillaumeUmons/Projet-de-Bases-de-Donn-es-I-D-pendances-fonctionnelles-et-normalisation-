@@ -112,7 +112,7 @@ public class Relation { // relation pour les données qui ne viennent pas de la b
 		}
 		return res;
 	}
-	public ArrayList<Df> getDf(){
+	public ArrayList<Df> getDf(){// pour les df
 		return df;
 	}
 	

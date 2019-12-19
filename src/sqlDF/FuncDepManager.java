@@ -13,10 +13,10 @@ public class FuncDepManager {// gerer les tables de base de donnée
 		this.conn = conn;
 		update();
 	}
-	public BdRelation get(int i) {
+	public BdRelation get(int i) {// recevoir la relation se trouvant à la position i
 		return relations.get(i);
 	}
-	public BdRelation get(String a) {
+	public BdRelation get(String a) {// la relation dont le nom est a si ca ne se trouve pas dans la table une exception est lancé
 		
 		BdRelation bd = null;
 		for(BdRelation i: relations) {
@@ -30,7 +30,7 @@ public class FuncDepManager {// gerer les tables de base de donnée
 		return bd;
 	}
 	
-	public boolean verifyfuncdef(String rel, Df df) {// verifier les dependances fonctionnelle
+	public boolean verifyfuncdef(String rel, Df df) {// verifier les dependances fonctionnelle par rapport à la table de nom rel  necessaire pour verifier les df dans funcdep et les df entré dans le cmd
 		boolean bool = true;
 		BdRelation bd = get(rel);
 		ArrayList<ArrayList<String>> arr = new ArrayList();
@@ -71,7 +71,7 @@ public class FuncDepManager {// gerer les tables de base de donnée
 		return bool;
 	}
 	
-	public void createfuncdep() {
+	public void createfuncdep() { // creer funcdep ca le cree si ca n'existe pas et on met à jour les tables de valeurs
 		conn.createfuncdep();
 		update();
 	}
@@ -82,12 +82,12 @@ public class FuncDepManager {// gerer les tables de base de donnée
 		}
 	}
 	
-	public void printFuncdep() {
+	public void printFuncdep() { // afficher funcdep
 		BdRelation funcdep = get("FuncDep");
 		funcdep.affiche();	
 	}
 	
-	public Df df(int i) {// la df à la ligne i dans funcdep on compte sur le fait que funcdep marche bien
+	public Df df(int i) {// retourne la df se trouvant à la ligne i
 		Df df;
 		BdRelation funcdep = get("FuncDep");
 		ArrayList<String> arr = funcdep.gettuple(i);// il est censé y avoir que 3 valeur dans ca et on ne peut rien modifier dans ces arrayList normalement donc on peut facilement y toucher
@@ -120,7 +120,7 @@ public class FuncDepManager {// gerer les tables de base de donnée
 		return df;
 	}
 	
-	public void attribuatedf() {// attribuer les df au relations
+	public void attribuatedf() {// attribuer les dans funcdep df au relations
 		BdRelation funcdep = get("FuncDep");
 		for(int i = 0;i < funcdep.getvalue().size();i++) {
 			BdRelation bd = get((String) funcdep.gettuple(i).get(0));
@@ -128,7 +128,7 @@ public class FuncDepManager {// gerer les tables de base de donnée
 			bd.adddf(d);
 		}
 	}
-	public ArrayList<BdRelation> getrels(){
+	public ArrayList<BdRelation> getrels(){// pour les relations
 		return relations;
 	}
 	
