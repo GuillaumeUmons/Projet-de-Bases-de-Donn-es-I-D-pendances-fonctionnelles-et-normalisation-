@@ -2,7 +2,7 @@ package df;
 
 import java.util.ArrayList;
 
-public class Relation { // relation pour les données qui ne viennent pas de la base de donnée
+public class Relation { // relation pour les donnees qui ne viennent pas de la base de donnee
 	protected String name;
 	protected ArrayList<String> names;
 	private ArrayList<Df> df = new ArrayList<Df>();
@@ -63,7 +63,7 @@ public class Relation { // relation pour les données qui ne viennent pas de la b
 			bool = true;
 		}
 		else {
-			// regarder si les attribut de Y  appartienne unne clé
+			// regarder si les attribut de Y  appartienne unne cle
 			bool = true;
 			
 		}
@@ -77,25 +77,25 @@ public class Relation { // relation pour les données qui ne viennent pas de la b
 		for(String i: left) {// quand on dit fermeture d'attribut = X au debut
 			fermeture.add(i);
 		}
-		ArrayList<Boolean> utilisé = new ArrayList<Boolean>();// les non utilisé comme ca je ne touche pas aux dependances fonctionnels de la table
+		ArrayList<Boolean> utilise = new ArrayList<Boolean>();// les non utilise comme ca je ne touche pas aux dependances fonctionnels de la table
 		for(Df d: df) {
-			utilisé.add(false);
+			utilise.add(false);
 		}
 		for(Df d:df) {
 			boolean inclus = true;
-			for(String i:d.getX()) {//on va verifier si les attributs de la partie droite sont inclus à l'interieur de la fermeture
+			for(String i:d.getX()) {//on va verifier si les attributs de la partie droite sont inclus a l'interieur de la fermeture
 				if(fermeture.contains(i) == false) {
 					inclus = false;
 				}
 			}
 			int pos = df.indexOf(d);
-			if(inclus == true && utilisé.get(pos) == false ) {// si c'est inclus alors on va rajouter les attributs qui sont la dedans
+			if(inclus == true && utilise.get(pos) == false ) {// si c'est inclus alors on va rajouter les attributs qui sont la dedans
 				for(String i:d.getY()) {
-					if(fermeture.contains(i) == false) {//rajouter les elements dans la fermeture seulement si ils ne sont pas à l'interieur
+					if(fermeture.contains(i) == false) {//rajouter les elements dans la fermeture seulement si ils ne sont pas a l'interieur
 						fermeture.add(i);
 					}
 				}
-				utilisé.set(pos, true);
+				utilise.set(pos, true);
 			}
 		}
 		return fermeture;
@@ -123,10 +123,10 @@ public class Relation { // relation pour les données qui ne viennent pas de la b
 		}
 		
 	}
-	// on a pas besoin de toucher à tout les attributs de gauche ils doivet rester intact quand tu vas les toucher
-	public boolean consequencelog(Df d) {// à ameliorer puisque ce n'est pas entierement bon
+	// on a pas besoin de toucher a tout les attributs de gauche ils doivet rester intact quand tu vas les toucher
+	public boolean consequencelog(Df d) {// a ameliorer puisque ce n'est pas entierement bon
 		//consequence logique de l'ensemble des df cad que l'ensemble des df respecte cette ensemble
-		// c'est à dire que si X->AC et (A->B ou C->B) alors X->B
+		// c'est a dire que si X->AC et (A->B ou C->B) alors X->B
 		boolean bool = false;
 		String[] X = d.getX();
 		String[] Y = d.getY();
@@ -150,12 +150,4 @@ public class Relation { // relation pour les données qui ne viennent pas de la b
 	public ArrayList<Df> getDf(){// pour les df
 		return df;
 	}
-	
-	public ArrayList<ArrayList<String>> generatekey(){
-		// tel que la fermeture de d'attribut est l'ensemble l'ensemble de tout les attribut
-		ArrayList<ArrayList<String>> key = new ArrayList();
-		
-		
-	}
-	
 }

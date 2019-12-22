@@ -38,13 +38,12 @@ public class Main {
 	public static void presentation() {
 		System.out.println(";;;;;;;;;;;;;;;;;;;;;;;;;;;;");
 		System.out.println("WELCOME TO THE APPLICATION MADE BY JUNIOR LOLE AND GUILLAUME CARDINAL   ;)   WE HOPE THAT YOU'LL HAVE FUN WITH THIS APP\n");
-		System.out.println("C'EST BIEN DE SE SENTIR CHEZ SOI MON CHER\n");
 		System.out.println("TU VEUX FAIRE AVEC LES BASES DE DONNEES(WRITE 1 AND PRESS ENTER) OR OU JUSTE AVEC UN ENSEMBLE DE RELATIONS(WRITE 2 AND PRESS ENTER)  ?\n");
 	}
 	
 	public static void Menue(int i) {
 		if(i == 1) {
-			System.out.println("oubliez pas que vous entrez n'importe quel nom ca cree un fichier si ca n'existe pas et si ca existe ça se connecte dans la base de donnée et si vous entrer un fichier qui n'est pas une base de donnée eh ben");
+			System.out.println("oubliez pas que vous entrez n'importe quel nom ca cree un fichier si ca n'existe pas et si ca existe ca se connecte dans la base de donnee et si vous entrer un fichier qui n'est pas une base de donnee eh ben");
 			Scanner scan = new Scanner(System.in);
 			String str = scan.nextLine();
 			con = new Connect(str);
@@ -54,10 +53,16 @@ public class Main {
 			try {
 				BdRelation funcdep = func.get("FuncDep");
 			}catch(IllegalArgumentException e) {
-				System.out.println("IL Y'A UN PROBLEME YA PAS DE FUNCDEP FAUT AJOUTER LES  DEPENDANCES FONCTIONNELLES");
-				ArrayList<String> rel = new ArrayList<String>();
-				ArrayList<Df> d = new ArrayList<Df>();
-				adddf(rel,d);
+				if(func.getrels().size() ==0) {
+					System.out.println("IL N'Y A RIEN DANS LA TABLE");
+					System.out.println("CETTE APPLICATION EST CHARGE DE VERIFIER DES DEPENDANCES FONCTIONNELLES PAS DE CREER DES TABLES\nSI VOUS VOULEZ ECRIRE DES TABLES NOUS VOUS CONSEILLONS D'UTILISER DB BROWSER FOR SQLITE UN EXELLENT OUTIL");
+				}
+				else {
+					System.out.println("IL Y'A UN PROBLEME YA PAS DE FUNCDEP FAUT AJOUTER LES  DEPENDANCES FONCTIONNELLES");
+					ArrayList<String> rel = new ArrayList<String>();
+					ArrayList<Df> d = new ArrayList<Df>();
+					adddf(rel,d);
+				}
 			}
 			options();
 			
@@ -76,8 +81,8 @@ public class Main {
 			Menue(a);
 		}
 	}
-	private static Df createDF() { //ATTENTION à améliorer ne marche que pour 1(voir constructeur classe DF) 
-		System.out.println("Partie de gauche de la DF"); //changer en plus précis
+	private static Df createDF() { //ATTENTION a ameliorer ne marche que pour 1(voir constructeur classe DF) 
+		System.out.println("Partie de gauche de la DF"); //changer en plus precis
 		Scanner scan = new Scanner(System.in);
 		String gauche= scan.nextLine();
 		String X[] = gauche.split(" ");
@@ -139,7 +144,7 @@ public class Main {
 				         + "(2) AJOUTER UN ENSEMBLE DE DF\n"
 				         + "(3) VERIFICATION BCNF DES TABLES\n"
 				         + "(4) VERIFICATION 3NF DES TABLES\n"
-				         + "(5) QUITTER TOUT CA\n");
+				         + "(5) QUITTER\n");
 		option(choice());
 	}
 }

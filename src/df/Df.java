@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class Df {
 	private String[] X;
 	private String[] Y;
-	public Df(String x,String y) {// c normalement pour un attribut chacun à ameliorer
+	public Df(String x,String y) {// c normalement pour un attribut chacun a ameliorer
 		X = new String[1];
 		X[0] = x;
 		Y = new String[1];

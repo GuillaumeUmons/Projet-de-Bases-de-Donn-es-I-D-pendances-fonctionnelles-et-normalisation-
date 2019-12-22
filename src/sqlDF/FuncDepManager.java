@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import df.Df;
 
-public class FuncDepManager {// gerer les tables de base de donnée
+public class FuncDepManager {// gerer les tables de base de donnee
 	private Connect conn;
 	private ArrayList<BdRelation> relations;
 	private int ArrayList;
@@ -17,7 +17,7 @@ public class FuncDepManager {// gerer les tables de base de donnée
 	 * @param i the table at the position i
 	 * @return the table at the position i
 	 */
-	public BdRelation get(int i) {// recevoir la relation se trouvant à la position i
+	public BdRelation get(int i) {// recevoir la relation se trouvant a la position i
 		return relations.get(i);
 	}
 	/**
@@ -25,7 +25,7 @@ public class FuncDepManager {// gerer les tables de base de donnée
 	 * @param a the name of the table
 	 * @return the table wich the name is a
 	 */
-	public BdRelation get(String a) {// la relation dont le nom est a si ca ne se trouve pas dans la table une exception est lancé
+	public BdRelation get(String a) {// la relation dont le nom est a si ca ne se trouve pas dans la table une exception est lance
 		
 		BdRelation bd = null;
 		for(BdRelation i: relations) {
@@ -44,7 +44,7 @@ public class FuncDepManager {// gerer les tables de base de donnée
 	 * @param df
 	 * @return
 	 */
-	public boolean verifyfuncdef(String rel, Df df,int b) {// verifier les dependances fonctionnelle par rapport à la table de nom rel  necessaire pour verifier les df dans funcdep et les df entré dans le cmd
+	public boolean verifyfuncdef(String rel, Df df,int b) {// verifier les dependances fonctionnelle par rapport a la table de nom rel  necessaire pour verifier les df dans funcdep et les df entre dans le cmd
 		boolean bool = true;
 		if(df.getY().length == 1 && conn.getnames().contains(rel) == true) {
 			BdRelation bd = get(rel);
@@ -52,8 +52,8 @@ public class FuncDepManager {// gerer les tables de base de donnée
 			ArrayList<ArrayList<String>> aa = new ArrayList();
 			//Afficher les deux
 			for(int i = 0;i <bd.getvalue().size();i++) {
-				arr.add(bd.get(df.getX(), i));// les valeurs par rapport à x 
-				aa.add(bd.get(df.getY(), i));// les valeurs par rapport à y
+				arr.add(bd.get(df.getX(), i));// les valeurs par rapport a x 
+				aa.add(bd.get(df.getY(), i));// les valeurs par rapport a y
 			}
 			System.out.println(arr);
 			System.out.println(aa);
@@ -95,7 +95,7 @@ public class FuncDepManager {// gerer les tables de base de donnée
 		return bool;
 	}
 	
-	public void createfuncdep() { // creer funcdep ca le cree si ca n'existe pas et on met à jour les tables de valeurs
+	public void createfuncdep() { // creer funcdep ca le cree si ca n'existe pas et on met a jour les tables de valeurs
 		conn.createfuncdep();
 		update();
 	}
@@ -112,13 +112,13 @@ public class FuncDepManager {// gerer les tables de base de donnée
 		funcdep.affiche();	
 	}
 	
-	public Df df(int i) {// retourne la df se trouvant à la ligne i
+	public Df df(int i) {// retourne la df se trouvant a la ligne i
 		Df df;
 		BdRelation funcdep = get("FuncDep");
-		ArrayList<String> arr = funcdep.gettuple(i);// il est censé y avoir que 3 valeur dans ca et on ne peut rien modifier dans ces arrayList normalement donc on peut facilement y toucher
+		ArrayList<String> arr = funcdep.gettuple(i);// il est cense y avoir que 3 valeur dans ca et on ne peut rien modifier dans ces arrayList normalement donc on peut facilement y toucher
 		String a = arr.get(1);
 		System.out.println(a);
-		String b = arr.get(2);// normalement c'est une chaine de caractère sans virgule la ou c'ezt verifié avant c'est dans le main quand on va entrer le tuple
+		String b = arr.get(2);// normalement c'est une chaine de caractère sans virgule la ou c'ezt verifie avant c'est dans le main quand on va entrer le tuple
 		ArrayList<String> X = new ArrayList<>();
 		int k = 0;
 		boolean espace = false;
@@ -135,7 +135,7 @@ public class FuncDepManager {// gerer les tables de base de donnée
 		if(espace == false) {
 			X.add(a);
 		}
-		//String[] x = (String[]) X.toArray(); ceci ne marche pas donc je suis obligé de faire manuellement mon tableau de String à la main
+		//String[] x = (String[]) X.toArray(); ceci ne marche pas donc je suis oblige de faire manuellement mon tableau de String a la main
 		String[] x = new String[X.size()];
 		for(int j = 0; j < x.length;j++) {
 			x[j] = X.get(j);

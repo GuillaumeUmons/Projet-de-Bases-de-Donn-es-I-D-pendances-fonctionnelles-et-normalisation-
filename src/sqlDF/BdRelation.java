@@ -46,7 +46,7 @@ public class BdRelation extends Relation {
 	 * @param i position of a tuple
 	 * @return an arrayList of attribute value in the tuple at the position i
 	 */
-	public ArrayList<String> get(String[] a,int i) {// recevoir les elements du tuple a la ligne i des attribut se trouvant dans la table de String a nécessaire pour
+	public ArrayList<String> get(String[] a,int i) {// recevoir les elements du tuple a la ligne i des attribut se trouvant dans la table de String a necessaire pour
 		ArrayList <String>res = new ArrayList<String>();
 		for(String aa : a) {
 			int ind = names.indexOf(aa);
