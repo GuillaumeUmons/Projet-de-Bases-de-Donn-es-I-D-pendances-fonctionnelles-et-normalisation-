@@ -44,6 +44,13 @@ public class Relation { // relation pour les donnees qui ne viennent pas de la b
 		}
 		return a;
 	}
+	public String alldf() {
+		String dfs = "|";
+		for(Df d:df) {
+			dfs = dfs+d.toString()+"|";
+		}
+		return dfs;
+	}
 	public boolean BCNF() {
 		boolean bool = true;
 		/**
