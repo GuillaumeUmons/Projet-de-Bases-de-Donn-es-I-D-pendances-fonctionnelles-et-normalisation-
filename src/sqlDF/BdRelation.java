@@ -15,7 +15,11 @@ public class BdRelation extends Relation {
 	public void add(ArrayList<String> val) {// ajoute des tuples dans la table necessair
 			value.add(val);
 	}
-	
+	/**
+	 * 
+	 * @param i the position in the arrayList tuple
+	 * @return the tuple at the position i
+	 */
 	@SuppressWarnings("unchecked")
 	public ArrayList<String> gettuple(int i){//le tuple a la ligne i de la table
 		return value.get(i);
@@ -27,11 +31,21 @@ public class BdRelation extends Relation {
 		for(ArrayList i: value) {
 			System.out.println(i);
 		}
+		System.out.println("\n");
 	}
+	/**
+	 * 
+	 * @return return the arrayList of the tuple in the table
+	 */
 	public ArrayList getvalue(){
 		return value;
 	}
-	
+	/**
+	 * 
+	 * @param a some names of column in the table
+	 * @param i position of a tuple
+	 * @return an arrayList of attribute value in the tuple at the position i
+	 */
 	public ArrayList<String> get(String[] a,int i) {// recevoir les elements du tuple a la ligne i des attribut se trouvant dans la table de String a nécessaire pour
 		ArrayList <String>res = new ArrayList<String>();
 		for(String aa : a) {

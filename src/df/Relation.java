@@ -10,9 +10,17 @@ public class Relation { // relation pour les données qui ne viennent pas de la b
 		this.names = names;
 		this.name = name;
 	}
+	/**
+	 * 
+	 * @return return all the column name in the table
+	 */
 	public ArrayList<String> getnames() {
 		return names;
 	}
+	/**
+	 * 
+	 * @return return the name of the table
+	 */
 	public String getname() {
 		return name;
 	}
@@ -46,74 +54,108 @@ public class Relation { // relation pour les données qui ne viennent pas de la b
 				bool = false;
 			}
 		}
-		// retourne la valeur de
 		return bool;
 	}
 	public boolean NF3() {
+		boolean bool = false;
 		// retourne la valeur par rapport a l'ensemble de df
 		if(BCNF()) {
-			return true;
+			bool = true;
 		}
 		else {
-			return (Boolean)null;
+			// regarder si les attribut de Y  appartienne unne clé
+			bool = true;
+			
 		}
+		return bool;
 
 	}
 	// ajouter une methode String
-	private ArrayList<String> fermetureattribut(String[] left) {// une fermeture 
-		// 
-		ArrayList<String> array = new ArrayList<>();
-		for(Df i: df) {
-			Df d = new Df(left,i.getY());
-			if(consequencelog(d)){
-				for(String a:i.getY()) {
-					array.add(a);
+	public ArrayList<String> fermetureattribut(String[] left) {// une fermeture 
+		// FAIRE AVEC ALGORITHME DU LIVRE
+		ArrayList<String> fermeture = new ArrayList<>();
+		for(String i: left) {// quand on dit fermeture d'attribut = X au debut
+			fermeture.add(i);
+		}
+		ArrayList<Boolean> utilisé = new ArrayList<Boolean>();// les non utilisé comme ca je ne touche pas aux dependances fonctionnels de la table
+		for(Df d: df) {
+			utilisé.add(false);
+		}
+		for(Df d:df) {
+			boolean inclus = true;
+			for(String i:d.getX()) {//on va verifier si les attributs de la partie droite sont inclus à l'interieur de la fermeture
+				if(fermeture.contains(i) == false) {
+					inclus = false;
 				}
 			}
+			int pos = df.indexOf(d);
+			if(inclus == true && utilisé.get(pos) == false ) {// si c'est inclus alors on va rajouter les attributs qui sont la dedans
+				for(String i:d.getY()) {
+					if(fermeture.contains(i) == false) {//rajouter les elements dans la fermeture seulement si ils ne sont pas à l'interieur
+						fermeture.add(i);
+					}
+				}
+				utilisé.set(pos, true);
+			}
 		}
-		return array;
+		return fermeture;
 	}
 	
 	private boolean equaltoatt(ArrayList<String> att) {// pour regarder la fermeture d'attribut
 		boolean bool = true;
-		/**if(att.size() == names.size()) { A CHANGER C INCORRECT
+		if(att.size() == names.size()) {
 			for(int i = 0;i < att.size();i++) {
-				if(!att.get(i).equals(names.get(i))) {
+				boolean find = false;
+				for(int j = 0;j < att.size();j++) {
+					if(att.get(i).equals(names.get(i))) {
+						find = true;
+					}
+				}
+				if(find == false) {
 					bool = false;
-					break;// on arrete la boucle c'est tout on a trouvé celui qui
+					break;
 				}
 			}
 			return bool;
 		}
 		else {
 			return false;
-		}**/
+		}
+		
 	}
 	// on a pas besoin de toucher à tout les attributs de gauche ils doivet rester intact quand tu vas les toucher
 	public boolean consequencelog(Df d) {// à ameliorer puisque ce n'est pas entierement bon
-		boolean res = false;
-		
-		// on va le faire directement
-		boolean direct = false;
-		for(Df i: df) {
-			if(i.equals(d)) {
-				direct = true;
-				res = true;
-				break;
+		//consequence logique de l'ensemble des df cad que l'ensemble des df respecte cette ensemble
+		// c'est à dire que si X->AC et (A->B ou C->B) alors X->B
+		boolean bool = false;
+		String[] X = d.getX();
+		String[] Y = d.getY();
+		for(Df dfs :df) {
+			if(X.equals(dfs.getX()) && Y.equals(dfs.getY())) {
+				bool = true;
+			}
+			else if(X.equals(dfs.getX())) {
+				ArrayList<String[]> decompo = dfs.decompoY();
+				for(String[] i:decompo) {
+					Df depf = new Df(i,Y);
+					if(consequencelog(depf) == true) {
+						bool = true;
+					}
+				}
 			}
 		}
-		
-		// on va le faire indirectement si le truc a été trouvée
-		if(direct == false) {
-			for(Df i: df) {
-				if(i.)
-			}
-			
-		}
-		return res;
+		return bool;
 	}
+	
 	public ArrayList<Df> getDf(){// pour les df
 		return df;
+	}
+	
+	public ArrayList<ArrayList<String>> generatekey(){
+		// tel que la fermeture de d'attribut est l'ensemble l'ensemble de tout les attribut
+		ArrayList<ArrayList<String>> key = new ArrayList();
+		
+		
 	}
 	
 }

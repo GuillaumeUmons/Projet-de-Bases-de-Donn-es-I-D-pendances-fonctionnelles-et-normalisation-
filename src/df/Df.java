@@ -16,11 +16,13 @@ public class Df {
 		X = x;
 		Y = y;
 	}
+	
 	public Df(String x, String[] y) {// dependance qui determine plein de chose
 		X = new String[1];
 		X[0] = x;
 		Y = y;
 	}
+	
 	public Df(String[] x, String y) {// dependance singulière
 		X = x;
 		Y = new String[1];
@@ -30,9 +32,11 @@ public class Df {
 	public String[] getX() {
 		return X;
 	}
+	
 	public String[] getY() {
 		return Y;
 	}
+	
 	public String toString() {// pour afficher l'ensemble des attributs
 		String x = "";
 		String y = "";
@@ -58,6 +62,7 @@ public class Df {
 	public boolean equals(Df df) {
 		return (X.equals(df.getX()) && Y.equals(df.getY()));// si ils ont le même ensemble d'attribut pour les deux parties
 	}
+	
 	public ArrayList<String[]> decompoY(){// on va decomposer Y en differente partition ca va servir pour les consequenses logiques
 		ArrayList<String[]> decomp = new ArrayList<>();
 		for(int i = 0;i < Y.length;i++) {
@@ -71,9 +76,6 @@ public class Df {
 			}
 		}
 		return decomp;// c'est un truc comme ca que il faut experimenter
-	}
-	public boolean xequal(String[] x) {
-		return (Boolean)
 	}
 	
 }

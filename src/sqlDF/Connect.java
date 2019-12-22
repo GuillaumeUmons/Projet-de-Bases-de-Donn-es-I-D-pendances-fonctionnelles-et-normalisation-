@@ -1,3 +1,7 @@
+/**
+ * the class to connect into a database
+ * @author Junior Lole, Guillaume Cardinal
+ */
 package sqlDF;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
@@ -15,11 +19,10 @@ public class Connect {
 	private DatabaseMetaData dmd;
 	private ArrayList<String> tablenames;
 	private String path;
-
 	/**
-	 * 
+	 * the constructor to connect in the database
 	 * @param str
-	 *        the path of the data base
+	 *        the path of the database
 	 */
 	public Connect(String path) {
 		try {
@@ -40,20 +43,21 @@ public class Connect {
 			e.printStackTrace();
 		}finally {
 			if(conn == null) {
-				try {
-					conn.close();
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-					System.err.println(e.getMessage());
-				}
+				close();
 			}
 		}
 	}
+	/**
+	 * 
+	 * @return the connection object wich allow to connect in the database
+	 */
 	public Connection getconnection() {
 		return conn;
 	}
-	
+	/**
+	 * 
+	 * @return return an arrayList of that contains all table's name of the database C
+	 */
 	private ArrayList<String> gettablesname() { // mettre des null pointer exception quand on a appelle ca
 		ArrayList<String> name = new ArrayList<String>(); 
 		try {
@@ -70,7 +74,11 @@ public class Connect {
 		}
 		return name;
 	}// voila c'est la liste des nom des tables
-
+	/**
+	 * 
+	 * @param i the position of the name of the table in the arrayList tablesname
+	 * @return all the column's name at in a arrayList 
+	 */
 	public ArrayList<String> getattribute(int i) {// pour avoir les attribut d'une table se trouvant à la position i de l'arraylist tablenames
 		ArrayList<String> colname = new ArrayList<String>();
 		try {
@@ -92,6 +100,11 @@ public class Connect {
 	}// pour avoir les colones d'une table
 	/*pour faire une table de base de donnée ce que l'on va faire c'est on recupere les noms des tables et grace au nom des tables ont va
 	 * 
+	 */
+	/**
+	 * 
+	 * @param i create a representation of the table that has a name at the position i in tablenames
+	 * @return return a BdRelation object with table data inside
 	 */
 	public BdRelation createtable(int i) {//on va creer une bdrelation avec des tables
 		Statement stmnt;// pour executer une requete sql en java
@@ -117,11 +130,12 @@ public class Connect {
 		}
 		return table;// normalement ca marche mais on va regarder ce que ca donne hein puisque on ne sait jamais
 	}// maintenant j'ai un moyen d'accedder à la base de donnée et j'ai theoriquement reussi a représenter ca sous forme d'un truc en java
+	/**
+	 * 
+	 * @return the tablenames
+	 */
 	public ArrayList<String> getnames(){
 		return tablenames;
-	}
-	public DatabaseMetaData getdmd() {
-		return dmd;
 	}
 	public void close() {
 		try {
@@ -131,9 +145,6 @@ public class Connect {
 			e.printStackTrace();
 		}
 	}
-	public void addfuncdep(Df df,String Relation) {// ajouter les def
-	}
-	
 	public void createfuncdep() {
 		String sql = "CREATE TABLE IF NOT EXISTS FuncDep(\n"
                 + "    table_name TEXT NOT NULL,\n"
@@ -150,7 +161,11 @@ public class Connect {
 		}		
 	}
 	
-	
+	/**
+	 * to add the df in th data base table funcdep
+	 * @param df the df to add we have the method to verify the df in another class
+	 * @param rel the name of the table
+	 */
 	public void addDF(Df df,String rel) {
 		ArrayList<ArrayList> j = new ArrayList();
 		if(df.getY().length == 1) {
@@ -158,12 +173,17 @@ public class Connect {
 				String X = "";
 				for(int i = 0;i < df.getX().length;i++) {
 					if(i < df.getX().length-1) {
-						X = X+df.getX()[i]+",";
+						X = X+df.getX()[i]+" ";
 					}
 				}	
 				Statement stmt = conn.createStatement();
-				String sql = "INSERT INTO FuncDep VALUES('"+rel+"','"+X+"','"+df.getY()[0]+"')";
-				stmt.execute(sql);
+				if(df.getY().length == 1) {
+					String sql = "INSERT INTO FuncDep VALUES('"+rel+"','"+X+"','"+df.getY()[0]+"')";//on considère que y'a q'un seul 
+					stmt.executeUpdate(sql);// pas encore testé a faire maintenant
+				}
+				else {
+					System.out.println("ca n'entre pas dans funcdep");
+				}
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -172,5 +192,23 @@ public class Connect {
 		else {
 			System.out.println("Ce n'est pas une bonne dependance fonctionnel");
 		}
-	}	
+	}
+	public void remove(Df df, String rel) {
+		String X = "DELETE FROM FuncDep WHERE table_name =";
+		for(String i:df.getX()) {
+			if(i.equals(df.getX()[df.getX().length - 1]) == false) {
+				X = X+i+" ";
+			}
+		}
+		X = X+" AND lhs = "+df.getY()[0];
+		Statement stmt;
+		try {
+			stmt = conn.createStatement();
+			stmt.executeUpdate(X);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
 }
