@@ -10,59 +10,10 @@ public class Main {
 	public static Connect con;
 	public static FuncDepManager func;
 	public static void  main(String[] args) {
-		// partie ou on demande le chemin de la ou se trouve la base de donnée
-		/**System.out.println("Vous Voulez utiliser le truc avec Base de Données(1) ou avec une relation que tu crée (2)");
-		Scanner scan = new Scanner(System.in);
-//		int choice = scan.nextInt();
-	//	if(choice == 1) {
-		//	// entre un ensemble d'attribut et un ensemble de df ensuite proposer les opérations
-			//System.out.println("veillez entrer le chemin vers la base de donnée sql");
-		String url = scan.nextLine();
-		Connect connect = new Connect(url);
-		System.out.println(connect.getnames().get(0));
-		FuncDepManager man = new FuncDepManager(connect);
-		try {
-		man.printFuncdep();
-		}catch(IllegalArgumentException e) {
-			man.createfuncdep();
-			man.printFuncdep();
-		}
-		System.out.println(man.verifyfuncdef("AA", new Df(new String[] {"A"},new String[] {"B","C"})));
-		System.out.println(man.df(0));
-		System.out.println(" \n   \n  \n");
-		man.attribuatedf();
-		for(BdRelation i:man.getrels()) {
-			i.affiche();
-			System.out.println(i.getDf());
-			System.out.println("  ");
-		}
-		BdRelation b = man.get("AA");
-		System.out.println("fermeture attribut de "+"A->B est"+ b.fermetureattribut(b.getDf().get(0).getX()));
-	}*/
-		presentation();
-		
+		presentation();	
 		Menue(choice());
 	}
-		/**else if(choice == 2) {
-			ArrayList<String> attribute = new ArrayList();
-			// ici pn va faire une methode qui va demander a l'utilisateur les choses à faire avec une base de donnée
-			boolean finished = false;
-			while(finished == false) {
-				Relation(attribute);
-				int i = choice();
-				if(i == 1) {
-					finished = true;
-				}else if (i == 2){
-					finished = false;
-				}
-				else {
-					choice();
-				}
-			}
-			Relation rel = new Relation(attribute, new String("test"));
-			System.out.println(rel);
-		}*/
-	//}
+	
 	private static void Relation(ArrayList<String> name) {
 		Scanner scan = new Scanner(System.in);
 		System.out.println("entrer un attribut");
