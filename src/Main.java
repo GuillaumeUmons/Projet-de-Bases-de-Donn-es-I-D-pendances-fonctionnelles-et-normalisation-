@@ -1,4 +1,3 @@
-import java.sql.SQLException;
 import java.util.*;
 import df.*;
 import sqlDF.*;
@@ -11,7 +10,6 @@ public class Main {
 		presentation();	
 		Menue(choice());
 	}
-	
 	private static void Relation(ArrayList<String> name) {
 		Scanner scan = new Scanner(System.in);
 		System.out.println("entrer un attribut");
@@ -23,7 +21,7 @@ public class Main {
 		Scanner scan = new Scanner(System.in);
 		int i  = 0;
 		try {
-		i= scan.nextInt();
+			i = scan.nextInt();
 		}catch(InputMismatchException e) {
 			i = choice();
 		}
@@ -54,7 +52,7 @@ public class Main {
 			}catch(IllegalArgumentException e) {
 				if(func.getrels().size() ==0) {
 					System.out.println("IL N'Y A RIEN DANS LA BASE DE DONNEE\n");
-					System.out.println("CETTE APPLICATION EST CHARGE DE VERIFIER DES DEPENDANCES FONCTIONNELLES PAS DE CREER DES TABLES\nSI VOUS VOULEZ ECRIRE DES TABLES NOUS VOUS CONSEILLONS D'UTILISER DB BROWSER FOR SQLITE UN EXELLENT OUTIL");
+					System.out.println("CETTE APPLICATION EST CHARGE DE VERIFIER DES DEPENDANCES FONCTIONNELLES PAS DE CREER DES TABLES\nSI VOUS VOULEZ ECRIRE DES TABLES NOUS VOUS CONSEILLONS D'UTILISER DB BROWSER FOR SQLITE UN EXELLENT OUTIL\n");
 					phase1 = false;
 				}
 				else {
@@ -65,10 +63,13 @@ public class Main {
 					phase1 = true;
 				}
 			}
-			if(phase1 ==true)
+			if(phase1 ==true) {
+				System.out.println("LA BASE DE DONNEE EST ENTREE ET MAINTENANT QUE VEUX TU FAIRE ? ");
+				func.removebaddf();
 				options1();
+			}
 			else {
-				System.out.println("POUR NOUS EXCUSER ON VOUS FAIT FAIT BASCULER DANS L'OPTION SANS BASE DE DONNEE");
+				System.out.println("POUR NOUS FAIRE EXCUSER VOUS ETES BASCULE DANS L'OPTION SANS BASE DE DONNEE\n");
 				Menue(2);
 			}
 		}
@@ -87,8 +88,6 @@ public class Main {
 			System.out.println("MAINTENANT C'EST LE MOMENT POUR ENTRER LES DEPENDANCES FONCTIONNELLES");
 			boolean finished = false;
 			while(finished == false) {
-				boolean X = true;
-				boolean Y = true;
 				Df d = createDF();
 				while(verify(d,relation) == false) {
 					System.out.println("C'EST N'EST PAS UNE BONNE DF");
@@ -108,10 +107,10 @@ public class Main {
 			options2();
 		}
 		else {
-			int a = choice();
-			Menue(a);
+			Menue(choice());
 		}
 	}
+	
 	private static Df createDF() {
 		System.out.println("IL FAUT METTRE DES ESPACES ENTRE ATTRIBUT POUR LES DELIMITER");
 		System.out.println("Partie de gauche de la DF"); //changer en plus precis
@@ -124,6 +123,7 @@ public class Main {
 		Df d= new Df(X,Y);
 		return d;
 	}
+	
 	private static void adddf(ArrayList<String> rel,ArrayList<Df> d) {// pour la base de donnée
 		System.out.println("veillez entrer des dependances fonctionneles vous en voulez combien ?");
 		int ch = choice();
@@ -135,7 +135,10 @@ public class Main {
 			rel.add(i);
 			Df df = createDF();
 			d.add(df);
+			a++;
 		}
+		System.out.println(rel);
+		System.out.println(d);
 		System.out.println("on verifie les df");
 		for(int o = 0;o < rel.size();o++) {
 			boolean bool = func.verifyfuncdef(rel.get(o), d.get(o),1);
@@ -144,11 +147,15 @@ public class Main {
 			}
 		}
 	}
-	private static void option(int i) {
+	
+	private static void option1(int i) {
 		if(i == 1) {
 			System.out.println("VOICI LES DF");
 			BdRelation bd = func.get("FuncDep");
-			func.printFuncdep();
+			for(int o = 0;o < bd.getvalue().size();o++) {
+				System.out.print("table_name:"+bd.gettuple(o).get(0)+" ");
+				System.out.println(func.df(o));
+			}
 			options1();
 		}else if(i == 2) {
 			ArrayList<String> rel = new ArrayList<>();
@@ -156,17 +163,26 @@ public class Main {
 			adddf(rel,d);
 			options1();
 		}else if(i == 3) {
-			
+			func.attribuatedf();//normalement les df à l'interieur sont bonnes
+			System.out.println("VEILLEZ ENTRER LE NOM DE LA TABLE A VERIFIER");
+			Scanner scan = new Scanner(System.in);
+			String tablename = scan.nextLine();
+			BdRelation table = func.get(tablename);
+			if(table.BCNF() == true)
+				System.out.println("C'EST EN BCNF DONC EN 3NF AUSSI");
+			else
+				System.out.println("C'EST PAS EN BCNF");
 		}else if(i == 4) {
 			
 		}else if(i == 5) {
 			System.out.println("BON C'EST FINI MERCI POUR TOUT");
 		}
 	}
+	
 	private static void option2(int i) {
 		if(i == 1) {
 			System.out.println("POUR QUEL ATTRIBUT DANS L'ENEMBLE DE DEPENDANCE?"+ relation.alldf());
-			System.out.println("ENTRER LA POSITION DE LA DEPENDANCE FONCTIONNEL ET ON REGARDE LA FERMETURE D'ATTRIBUT DE LA PARTIE GAUCHE DE LA DF");
+			System.out.println("ENTRER LA POSITION DE LA DEPENDANCE FONCTIONNEL ET ON REGARDE LA FERMETURE D'ATTRIBUT DE LA PARTIE GAUCHE DE LA DF ON COMMENCE PAR 0");
 			int choice = choice();
 			try {
 			ArrayList<String> arr = relation.fermetureattribut(relation.getDf().get(choice).getX());
@@ -213,16 +229,17 @@ public class Main {
 			System.out.println("BON C'EST LA FIN MERCI POUR TOUT");
 		}
 	}
+	
 	private static void options1() {
-		System.out.println("LA BASE DE DONNEE EST ENTREE ET MAINTENANT QUE VEUX TU FAIRE ? ");
 		System.out.println("LES OPTIONS :");
 		System.out.println("(1) VOIR LES DEPENDANCES FONCTIONNELLES\n"
 				         + "(2) AJOUTER UN ENSEMBLE DE DF\n"
 				         + "(3) VERIFICATION BCNF DES TABLES\n"
 				         + "(4) VERIFICATION 3NF DES TABLES\n"
 				         + "(5) QUITTER\n");
-		option(choice());
+		option1(choice());
 	}
+	
 	private static void options2() {
 		System.out.println("(1) FERMETURE D'ATTRIBUT\n"
 						 + "(2)BCNF OU PAS\n"
@@ -231,8 +248,8 @@ public class Main {
 						  +"(5) QUITTER\n");
 		option2(choice());
 	}
-private static boolean verify(Df d,Relation rel){
-		boolean bool = true;
+	
+	private static boolean verify(Df d,Relation rel){
 		boolean X = true;
 		boolean Y = true;
 		for(String j :d.getX()) {

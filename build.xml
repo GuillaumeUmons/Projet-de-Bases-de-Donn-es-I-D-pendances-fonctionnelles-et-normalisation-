@@ -1,11 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- WARNING: Eclipse auto-generated file.
-              Any modifications will be overwritten.
-              To include a user specific buildfile here, simply create one in the same
-              directory with the processing instruction <?eclipse.ant.import?>
-              as the first entry and export the buildfile again. --><project basedir="." default="build" name="projetbdd">
+<project basedir="." default="build" name="projetbdd">
     <property environment="env"/>
-    <property name="ECLIPSE_HOME" value="../../../../Junior/eclipse/eclipse-jee-2019-09-R-win32-x86_64/eclipse/"/>
     <property name="debuglevel" value="source,lines,vars"/>
     <property name="target" value="11"/>
     <property name="source" value="11"/>

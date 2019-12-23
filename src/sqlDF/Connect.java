@@ -171,11 +171,16 @@ public class Connect {
 		if(df.getY().length == 1) {
 			try {
 				String X = "";
-				for(int i = 0;i < df.getX().length;i++) {
+				if(df.getX().length == 1) {
+					X = df.getX()[0];
+				}
+				else {
+					for(int i = 0;i < df.getX().length;i++) {
 					if(i < df.getX().length-1) {
 						X = X+df.getX()[i]+" ";
+						}
 					}
-				}	
+				}
 				Statement stmt = conn.createStatement();
 				if(df.getY().length == 1) {
 					String sql = "INSERT INTO FuncDep VALUES('"+rel+"','"+X+"','"+df.getY()[0]+"')";//on considère que y'a q'un seul 
@@ -194,13 +199,26 @@ public class Connect {
 		}
 	}
 	public void remove(Df df, String rel) {
-		String X = "DELETE FROM FuncDep WHERE table_name =";
+		String X = "DELETE FROM FuncDep WHERE (table_name = ";
+		X = X+rel+" AND lhs = ";
 		for(String i:df.getX()) {
 			if(i.equals(df.getX()[df.getX().length - 1]) == false) {
 				X = X+i+" ";
 			}
+			else {
+				X = X+i;
+			}
 		}
-		X = X+" AND lhs = "+df.getY()[0];
+		X = X+" AND rhs = ";
+		for(String i:df.getY()) {
+			if(i.equals(df.getY()[df.getX().length - 1]) == false) {
+				X = X+i+" ";
+			}
+			else {
+				X = X+i;
+			}
+		}
+		X = X+")";
 		Statement stmt;
 		try {
 			stmt = conn.createStatement();

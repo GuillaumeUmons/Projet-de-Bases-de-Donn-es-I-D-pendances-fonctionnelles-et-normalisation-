@@ -7,7 +7,6 @@ import df.Df;
 public class FuncDepManager {// gerer les tables de base de donnee
 	private Connect conn;
 	private ArrayList<BdRelation> relations;
-	private int ArrayList;
 	public FuncDepManager(Connect conn) {
 		this.conn = conn;
 		update();
@@ -117,30 +116,11 @@ public class FuncDepManager {// gerer les tables de base de donnee
 		BdRelation funcdep = get("FuncDep");
 		ArrayList<String> arr = funcdep.gettuple(i);// il est cense y avoir que 3 valeur dans ca et on ne peut rien modifier dans ces arrayList normalement donc on peut facilement y toucher
 		String a = arr.get(1);
-		System.out.println(a);
-		String b = arr.get(2);// normalement c'est une chaine de caractère sans virgule la ou c'ezt verifie avant c'est dans le main quand on va entrer le tuple
+		String b = arr.get(2);// normalement c'est une chaine de caractere sans virgule la ou c'ezt verifie avant c'est dans le main quand on va entrer le tuple
 		ArrayList<String> X = new ArrayList<>();
 		int k = 0;
 		boolean espace = false;
-		for(int j= 0;j < a.length();j++) {
-			String add = a.substring(k,j);
-			System.out.println(add);
-			if(a.charAt(j) ==' ') {
-				System.out.println(add);
-				X.add(add);
-				k = j+1;
-				espace = true;
-			}
-		}
-		if(espace == false) {
-			X.add(a);
-		}
-		//String[] x = (String[]) X.toArray(); ceci ne marche pas donc je suis oblige de faire manuellement mon tableau de String a la main
-		String[] x = new String[X.size()];
-		for(int j = 0; j < x.length;j++) {
-			x[j] = X.get(j);
-			
-		}
+		String[] x = a.split(" ");
 		df = new Df(x,new String[]{b});
 		return df;
 	}
@@ -169,16 +149,20 @@ public class FuncDepManager {// gerer les tables de base de donnee
 	}
 	public void adddf(String rel,Df df) {
 		conn.addDF(df, rel);
+		update();
 	}
 	public void removebaddf() {
 		BdRelation d = get("FuncDep");
+		ArrayList<ArrayList<String>> arr = d.getvalue();
 		for(int i = 0;i < d.getvalue().size();i++) {
 			Df df = df(i);
-			boolean bool = verifyfuncdef(d.getnames().get(i),df,0);
+			boolean bool = verifyfuncdef(arr.get(i).get(0),df,0);//impossible de faire d.getvalue().get(
 			if(bool == false) {
-					// changer ca
+					conn.remove(df, arr.get(i).get(0));
 			}
 		}
+		System.out.println("IL Y'A PEUT ETRE EU DES DF QUI ONT ETE ENLEVE PARCE QUE ELLES ETAIENT MAUVAISE");
+		update();
 	}
 	
 	// detecter les dependances fonctionnelles dans les tables pour pouvoir ecrire dans funcdep

@@ -5,11 +5,10 @@ import java.util.ArrayList;
 import df.Relation;
 
 public class BdRelation extends Relation {
-	private ArrayList<ArrayList> value ;
-	@SuppressWarnings("unchecked")
+	private ArrayList<ArrayList<String>> value ;
 	public BdRelation(ArrayList<String> names,String name) {// constructeur avec lle
 		super(names, name);
-		value = new ArrayList();
+		value = new ArrayList<>();
 	}
 	
 	public void add(ArrayList<String> val) {// ajoute des tuples dans la table necessair
